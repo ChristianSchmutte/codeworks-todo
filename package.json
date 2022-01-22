@@ -1,0 +1,20 @@
+{
+  "name": "codeworks-todo",
+  "version": "1.0.0",
+  "description": "simple todo app for AWS deployment lecture",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "codeworks",
+  "license": "ISC",
+  "devDependencies": {
+    "commitizen": "^4.2.4",
+    "cz-changelog": "^1.0.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-changelog"
+    }
+  }
+}
