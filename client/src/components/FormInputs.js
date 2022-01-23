@@ -9,6 +9,7 @@ function TextInput({
   showForm,
   value,
   setValue,
+  required,
 }) {
   const ref = useRef();
 
@@ -28,6 +29,7 @@ function TextInput({
         ref={ref}
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        required={required}
       />
     </InputField>
   );

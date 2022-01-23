@@ -55,6 +55,7 @@ function Todos({ tasks, setTasks }) {
           showForm={showForm}
           value={name}
           setValue={setName}
+          required={true}
         />
         <TextInput
           name="category"
