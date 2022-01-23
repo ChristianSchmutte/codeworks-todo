@@ -16,7 +16,7 @@ This is a simple todo application:
 - Postgres
 
 # Install & Run
-Server
+### Server
 - create .env file with database credentials + server port
   ```
   SERVER_PORT=
@@ -28,7 +28,8 @@ Server
   ```
 - `npm install` dependencies
 - `npm start` the server
-Client
+
+### Client
 - `npm install` dependencies
 - create .env file with server URL
   ```
