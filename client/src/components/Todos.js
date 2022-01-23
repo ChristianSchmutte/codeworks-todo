@@ -14,10 +14,7 @@ function Todos({ tasks, setTasks }) {
   const [category, setCategory] = useState('');
   const [due, setDue] = useState(new Date().toISOString().slice(0, 10));
 
-  const toggleFormHandler = function () {
-    setShowForm((prior) => !prior);
-  };
-  const doneClickHandler = async function (id, done = true) {
+  const handleOnDone = async function (id, done = true) {
     if (id >= 0) {
       const completedTodo = await updateTodo(id, { done });
       if (completedTodo) {
@@ -27,7 +24,7 @@ function Todos({ tasks, setTasks }) {
       }
     }
   };
-  const submitHandler = async function (e) {
+  const handleSubmit = async function (e) {
     e.preventDefault();
     const newTodo = await addTodo({ name, category, due });
     if (typeof newTodo.name === 'string' && typeof newTodo.id === 'number') {
@@ -39,24 +36,18 @@ function Todos({ tasks, setTasks }) {
     setShowForm(false);
   };
 
-  // render tasks
-  const showTasks = tasks.map((task) => (
-    <Task key={task.id} task={task} handleDone={doneClickHandler} />
-  ));
-
   return (
     <TodoWrapper>
       <Header>
         <h1>Your tasks</h1>
-        {showForm ? (
-          <ToggleButton onClick={toggleFormHandler}>Cancel</ToggleButton>
-        ) : (
-          <ToggleButton onClick={toggleFormHandler} type="secondary">
-            Add task
-          </ToggleButton>
-        )}
+        <ToggleButton
+          onClick={() => setShowForm(!showForm)}
+          type={showForm ? undefined : 'secondary'}
+        >
+          {showForm ? 'Cancel' : 'Add task'}
+        </ToggleButton>
       </Header>
-      <Form showForm={showForm} onSubmit={submitHandler}>
+      <Form showForm={showForm} onSubmit={handleSubmit}>
         <TextInput
           name="task"
           label="Task"
@@ -66,7 +57,7 @@ function Todos({ tasks, setTasks }) {
           setValue={setName}
         />
         <TextInput
-          name="list"
+          name="category"
           label="Category"
           placeholder="Enter category..."
           width="200px"
@@ -83,7 +74,11 @@ function Todos({ tasks, setTasks }) {
         <Button type="submit">Add Task</Button>
       </Form>
       {tasks.length ? (
-        <TaskList>{showTasks}</TaskList>
+        <TaskList>
+          {tasks.map((task) => (
+            <Task key={task.id} task={task} onDone={handleOnDone} />
+          ))}
+        </TaskList>
       ) : (
         <NoTasks showForm={showForm}>
           <p>😴 No tasks ...</p>

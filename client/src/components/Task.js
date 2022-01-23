@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 import Badge from './ui/Badge.styled';
 
-function Task({ task, handleDone }) {
+function Task({ task, onDone }) {
   return (
     <TaskWrapper done={task.done}>
       <TextGroup>
         {task.done ? (
-          <CheckedDoneButton onClick={() => handleDone(task.id, false)}>
+          <CheckedDoneButton onClick={() => onDone(task.id, false)}>
             x
           </CheckedDoneButton>
         ) : (
-          <DoneButton onClick={() => handleDone(task.id)} />
+          <DoneButton onClick={() => onDone(task.id)} />
         )}
         <TaskName>{task.name}</TaskName>
       </TextGroup>
