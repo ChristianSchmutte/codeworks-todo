@@ -1,22 +1,48 @@
 import { useState } from 'react';
+import styled, { keyframes, css } from 'styled-components';
 import { TextInput, DateInput } from './FormInputs';
 import Button from './ui/Button.styled';
+import ToggleButton from './ui/ToggleButton';
 import TodoWrapper from './ui/TodoWrapper.styled';
 import Task from './Task';
-import styled, { keyframes, css } from 'styled-components';
+import { addTodo, updateTodo } from '../services/api';
 
-function Todos({ tasks }) {
+function Todos({ tasks, setTasks }) {
   const [showForm, setShowForm] = useState(false);
+  // Form fields
+  const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
+  const [due, setDue] = useState(new Date().toISOString().slice(0, 10));
 
   const toggleFormHandler = function () {
     setShowForm((prior) => !prior);
   };
-
-  const submitHandler = function (e) {
+  const doneClickHandler = async function (id, done = true) {
+    if (id >= 0) {
+      const completedTodo = await updateTodo(id, { done });
+      if (completedTodo) {
+        setTasks((prior) =>
+          prior.map((todo) => (todo.id === id ? { ...todo, done } : todo))
+        );
+      }
+    }
+  };
+  const submitHandler = async function (e) {
     e.preventDefault();
+    const newTodo = await addTodo({ name, category, due });
+    if (typeof newTodo.name === 'string' && typeof newTodo.id === 'number') {
+      setTasks((prior) => [...prior, newTodo]);
+    }
+    setName('');
+    setCategory('');
+    setDue(new Date().toISOString().slice(0, 10));
+    setShowForm(false);
   };
 
-  const showTasks = tasks.map((task) => <Task key={task.id} task={task} />);
+  // render tasks
+  const showTasks = tasks.map((task) => (
+    <Task key={task.id} task={task} handleDone={doneClickHandler} />
+  ));
 
   return (
     <TodoWrapper>
@@ -30,23 +56,39 @@ function Todos({ tasks }) {
           </ToggleButton>
         )}
       </Header>
-      <Form showForm={showForm}>
+      <Form showForm={showForm} onSubmit={submitHandler}>
         <TextInput
           name="task"
           label="Task"
           placeholder="Write a new task..."
           showForm={showForm}
+          value={name}
+          setValue={setName}
         />
         <TextInput
           name="list"
           label="Category"
           placeholder="Enter category..."
           width="200px"
+          value={category}
+          setValue={setCategory}
         />
-        <DateInput name="due" label="Due date" width="200px" />
+        <DateInput
+          name="due"
+          label="Due date"
+          width="200px"
+          value={due}
+          setValue={setDue}
+        />
         <Button type="submit">Add Task</Button>
       </Form>
-      {tasks.length ? <TaskList>{showTasks}</TaskList> : <h2>😴 No tasks..</h2>}
+      {tasks.length ? (
+        <TaskList>{showTasks}</TaskList>
+      ) : (
+        <NoTasks showForm={showForm}>
+          <p>😴 No tasks ...</p>
+        </NoTasks>
+      )}
     </TodoWrapper>
   );
 }
@@ -89,14 +131,12 @@ const TaskList = styled.div`
   gap: 16px;
   margin-top: 32px;
 `;
-const ToggleButton = styled(Button)`
-  background-color: ${({ theme }) => theme.colors.gray[200]};
+const NoTasks = styled.div`
   color: ${({ theme }) => theme.colors.gray[700]};
-  width: 8rem;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.gray[300]};
-  }
-  &:active {
-    background-color: ${({ theme }) => theme.colors.gray[400]};
-  }
+  display: grid;
+  font-size: 1.6rem;
+  height: ${({ showForm }) =>
+    showForm ? 'calc(100% - 400px)' : 'calc(100% - 60px)'};
+  place-items: center;
+  width: 100%;
 `;

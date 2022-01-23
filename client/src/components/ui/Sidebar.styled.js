@@ -6,7 +6,7 @@ const Sidebar = styled.aside`
   box-shadow: ${({ theme }) => theme.shadows.lg};
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  justify-content: space-between;
   height: 100%;
   padding: 32px 16px;
   grid-area: lists;

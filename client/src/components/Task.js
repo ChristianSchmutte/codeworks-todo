@@ -1,11 +1,17 @@
 import styled from 'styled-components';
 import Badge from './ui/Badge.styled';
 
-function Task({ task }) {
+function Task({ task, handleDone }) {
   return (
-    <TaskWrapper>
+    <TaskWrapper done={task.done}>
       <TextGroup>
-        <DoneButton />
+        {task.done ? (
+          <CheckedDoneButton onClick={() => handleDone(task.id, false)}>
+            x
+          </CheckedDoneButton>
+        ) : (
+          <DoneButton onClick={() => handleDone(task.id)} />
+        )}
         <TaskName>{task.name}</TaskName>
       </TextGroup>
       <TextGroupExtra>
@@ -30,9 +36,11 @@ const TaskWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: ${({ theme }) => theme.radius.md};
   border: none;
+  color: ${({ theme, done }) => done && theme.colors.gray[500]};
   display: flex;
   justify-content: space-between;
   padding: 16px;
+  text-decoration: ${({ done }) => done && 'line-through'};
 `;
 const DoneButton = styled.button`
   background-color: ${({ theme }) => theme.colors.gray[300]};
@@ -48,6 +56,21 @@ const DoneButton = styled.button`
   }
   &:active {
     background-color: ${({ theme }) => theme.colors.gray[500]};
+  }
+`;
+const CheckedDoneButton = styled(DoneButton)`
+  background-color: #d1fae5;
+  color: #047857;
+  font-weight: 700;
+  line-height: 1.2rem;
+  padding: 0;
+  &:hover {
+    background-color: #fecaca;
+    color: #b91c1c;
+  }
+  &:active {
+    background-color: #fca5a5;
+    color: #b91c1c;
   }
 `;
 const TextGroup = styled.div`

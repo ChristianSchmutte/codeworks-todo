@@ -1,7 +1,15 @@
 import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-function TextInput({ name, label, placeholder = '', width, showForm }) {
+function TextInput({
+  name,
+  label,
+  placeholder = '',
+  width,
+  showForm,
+  value,
+  setValue,
+}) {
   const ref = useRef();
 
   useEffect(() => {
@@ -13,16 +21,28 @@ function TextInput({ name, label, placeholder = '', width, showForm }) {
   return (
     <InputField width={width}>
       <label>{label}</label>
-      <Input type="text" name={name} placeholder={placeholder} ref={ref} />
+      <Input
+        type="text"
+        name={name}
+        placeholder={placeholder}
+        ref={ref}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
     </InputField>
   );
 }
 
-function DateInput({ name, label, width }) {
+function DateInput({ name, label, width, value, setValue }) {
   return (
     <InputField width={width}>
       <label>{label}</label>
-      <Input type="date" name={name} />
+      <Input
+        type="date"
+        name={name}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
     </InputField>
   );
 }
