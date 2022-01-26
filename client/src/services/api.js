@@ -1,7 +1,9 @@
-const URL = process.env.REACT_APP_SERVER;
+const BASE_URL = process.env.REACT_APP_SERVER ?? '';
 
 function fetchRequest(path, options) {
-  const url = path ? URL + path : URL;
+  // const url = path ? URL + path : URL;
+  const url = BASE_URL + path
+  console.log('FINAL URL:',url, 'BASE:', BASE_URL, 'path')
   return fetch(url, options)
     .then((res) => (res.status <= 400 ? res : Promise.reject(res)))
     .then((res) => (res.status !== 204 ? res.json() : res))

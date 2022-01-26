@@ -28,18 +28,16 @@ async function postOne(req, res) {
 }
 async function updateOne(req, res) {
   try {
-    const id = req.params.id;
-    const changes = req.body;
-    const dbRes = await db.todo.update(changes, {
-      where: { id },
-      returning: true,
-    });
-    if (dbRes[0] > 0) {
+    const id = parseInt(req.params.id);
+    const todo = await db.todo.findByPk(id)
+    if (todo) {
+      todo.done = !todo.done;
+      await todo.save 
       res.status(202);
-      // sequelize returns [num records, array of updated records]
-      res.send(dbRes[1][0]);
+      res.send(todo);
       res.end();
     } else {
+      console.log('ERR: NOT FOUND')
       res.status(404);
       res.send(`todo id ${id} not found`);
       res.end();

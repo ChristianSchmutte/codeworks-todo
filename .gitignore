@@ -27,6 +27,7 @@ node_modules
 .node_repl_history
 
 # Custom
+build
 private
 dist
 .env

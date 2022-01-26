@@ -8,7 +8,7 @@ const {
 
 const router = Router();
 
-router.get('/', (req, res) => res.send('Server running...'));
+router.get('/', (req, res) => res.sendFile(path.join(__dirname, 'build', 'index.html')));
 router.get('/todo', getAll);
 router.post('/todo', postOne);
 router.patch('/todo/:id', updateOne);

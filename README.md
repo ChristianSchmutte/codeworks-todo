@@ -36,5 +36,3 @@ This is a simple todo application:
   REACT_APP_SERVER=
   ```
 - `npm start` the client
-
-
